@@ -51,7 +51,13 @@ void setup()
   frameRate(1);
   
   loadConfigFile();
-  GLOBAL_COUNTER++;
+  
+  //set number of sessions
+  if(NUMBER_OF_SESSIONS<100)
+  {
+    NUMBER_OF_SESSIONS=100;
+  }
+  
   //set absolute number
   if (ABSOLUTE_NUMBER==-1)
   {
@@ -59,8 +65,9 @@ void setup()
     long timestamp = d.getTime() + (86400000 ); 
     String date = new java.text.SimpleDateFormat("yyyyMMdd").format(timestamp); 
     ABSOLUTE_NUMBER=0;
-    ABSOLUTE_NUMBER=int(date+""+(int)random(10,99));
+    ABSOLUTE_NUMBER=int(date+""+NUMBER_OF_SESSIONS);
   }
+  
   try {
     //float mapScreenWidth, float mapScreenHeight, float topLatitude, float bottomLatitude, float leftLongitude, float rightLongitude) {
     map =new MercatorMap(MAP_WIDTH, MAP_HEIGHT, TOP_LAT, BOTTOM_LAT, LEFT_LON, RIGHT_LON );
@@ -131,7 +138,7 @@ void draw()
     textSize(30);
     text("Distance:"+dist +"\n"+
       "Velocity:"+ vel+
-      "\nTotal Distance:"+dist_total+"\n Size:"+places.size()+"\nGlobal_counter:"+GLOBAL_COUNTER+"\nName: "
+      "\nTotal Distance:"+dist_total+"\n Size:"+places.size()+"\nGlobal_counter:"+VERSION_COUNTER+"\nName: "
       +GLOBAL_NAME+"\nAbsolute_number:"+ABSOLUTE_NUMBER, 100, 100);
   }
   catch(Exception e)
@@ -146,18 +153,14 @@ void onLocationEvent(double _latitude, double _longitude, double _altitude)
   try {
     me.x=(float)_latitude;
     me.y=(float)_longitude;
-
-
     me_pixel = map.getScreenLocation(me);
     if (places==null)
     {
       places=new ArrayList<PVector>();
       dataStore=new ArrayList<PVector>();
     }
-
     dataStore.add(me.get());
     places.add(me_pixel);
-
     if (me_last!=null)
     {
       dist        = distance_world_mercator(me_last, me);

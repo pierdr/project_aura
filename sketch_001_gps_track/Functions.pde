@@ -2,62 +2,20 @@ double earth_radius = 6371; //km
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.util.Date;
-
-public int GLOBAL_COUNTER=0;
-public int ABSOLUTE_NUMBER=-1;
-public String GLOBAL_NAME="";
+import java.io.PrintWriter;
 
 
-// based on haversine formula - http://en.wikipedia.org/wiki/Haversine_formula
-float distance(PVector lat_lon_0, PVector lat_lon_1) {
+public int VERSION_COUNTER =  0;
+public int NUMBER_OF_SESSIONS  =  0;
+public int ABSOLUTE_NUMBER =  -1;
+public String GLOBAL_NAME  =  "";
+public String bufferWeb    =  "";
 
-  float lat0 = to_radians(lat_lon_0.x);
-  float lon0 = to_radians(lat_lon_0.y);
-  float lat1 = to_radians(lat_lon_1.x);
-  float lon1 = to_radians(lat_lon_1.y);
 
-  float dlat = lat1 - lat0;
-  float dlon = lon1 - lon0;
 
-  double h = sin(dlat / 2) * sin(dlat / 2) + cos(lon0) * cos(lon1) * sin(dlon / 2) * sin(dlon / 2);
-  double a = 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
-  double d = h * earth_radius * 1000.0;
-
-  return  (float)d;
-}
-
-float angle(PVector a, PVector b) {
-  // a . b = |a||b|cos(ø)
-  float angle = acos(a.dot(b) / (a.mag() * b.mag()));
-  if (b.y > a.y)
-    angle = TWO_PI - angle;
-  return angle;
-}
-
-float ellipsoid_a = 6378137.0;
-float ellipsoid_b = 6356752.314;
-
-float distance_world_mercator(PVector lat_lon_0, PVector lat_lon_1) {
-
-  float lat0 = to_radians(lat_lon_0.x);
-  float lon0 = to_radians(lat_lon_0.y);
-  float lat1 = to_radians(lat_lon_1.x);
-  float lon1 = to_radians(lat_lon_1.y);
-
-  PVector m0 = new PVector();
-  m0.y = ellipsoid_a * lon0;
-  m0.x = ellipsoid_a * log((sin(lat0) + 1) / cos(lat0));
-
-  PVector m1 = new PVector();
-  m1.y = ellipsoid_a * lon1;
-  m1.x = ellipsoid_a * log((sin(lat1) + 1) / cos(lat1));
-
-  return PVector.dist(m1, m0);
-}
-
-float to_radians(float deg) {
-  return deg * PI / 180;
-}
+/*******************************************
+ SAVE LOCATION DATA
+ ********************************************/
 void saveLocationData(boolean whole, boolean user)
 {
   String[] s;
@@ -85,35 +43,29 @@ void saveLocationData(boolean whole, boolean user)
     {
       s1=me.x+","+me.y+","+dateTmp+",auto";
     }
+    VERSION_COUNTER++;
+
     saveStringToFile(SDCARD + File.separator + "gps_track_"+ABSOLUTE_NUMBER+".txt", s1);
-  }
-}
-void saveStringOnTheWeb(String URL, String newData)
-{
-}
-void saveStringToFile(String outFileName, String newData)
-{
-  PrintWriter pw = null;
-  try 
-  {
-    pw = createWriter(outFileName); 
-    pw.println(newData);
-  } 
-  catch (Exception e) 
-  {
-    // Report problem or handle it
-    println("SAVE_STRING_TO_FILE:"+e);
-  }
-  finally
-  {
-    if (pw != null)
+    String url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
+    url+="?save_user="+GLOBAL_NAME;
+    url+="&session="+ABSOLUTE_NUMBER;
+    url+="&version="+VERSION_COUNTER;
+    url+="&data="+bufferWeb+"\n"+s1;
+    if(makeHTTPGET(url))
     {
-      pw.flush(); 
-      pw.close();
+      bufferWeb="";
+    }
+    else
+    {
+      bufferWeb+="\n"+s1;
     }
   }
 }
+//end save location data
 
+/*******************************************
+ CONFIG FILE
+ ********************************************/
 void loadConfigFile()
 {
   //read name from read only config file in the internal storage
@@ -141,7 +93,7 @@ void loadConfigFile()
       println(field);
       if (field.equals("counter"))
       {
-        GLOBAL_COUNTER=infos[i].getInt("value");
+        VERSION_COUNTER=infos[i].getInt("value");
       }
       else if (field.equals("absolute_number"))
       {
@@ -149,7 +101,21 @@ void loadConfigFile()
         if (infos[i].getInt("value")!=-1)
         {
           ABSOLUTE_NUMBER=infos[i].getInt("value");
-          println(ABSOLUTE_NUMBER);
+          println("session id (alias ABSOLUTE_NUMBER):"+ABSOLUTE_NUMBER);
+        }
+      }
+      else if (field.equals("number_of_sessions"))
+      {
+        println("NOS:"+infos[i].getInt("value"));
+        if (infos[i].getInt("value")!=-1)
+        {
+          
+          NUMBER_OF_SESSIONS=infos[i].getInt("value");
+          if(NUMBER_OF_SESSIONS<100)
+          {
+            NUMBER_OF_SESSIONS=100;
+          }
+          println(NUMBER_OF_SESSIONS);
         }
       }
     }
@@ -170,11 +136,16 @@ void updateConfigFile()
       String field = infos[i].getString("field");
       if (field.equals("counter"))
       {
-        infos[i].setInt("value", GLOBAL_COUNTER);
+        infos[i].setInt("value", VERSION_COUNTER);
       }
       else if (field.equals("absolute_number"))
       {
         infos[i].setInt("value", ABSOLUTE_NUMBER);
+      }
+      else if (field.equals("number_of_sessions"))
+      {
+        
+        infos[i].setInt("value", NUMBER_OF_SESSIONS);
       }
     }
 
@@ -191,13 +162,19 @@ void updateConfigFile()
     println("UPDATE_CONFIG_FILE:"+e);
   }
 }
+//end config methods
 
+
+/*******************************************
+ SERVICE METHODS
+ ********************************************/
 void newSession()
 {
   Date d = new Date();
   long timestamp = d.getTime() + (86400000 ); 
   String date = new java.text.SimpleDateFormat("yyyyMMdd").format(timestamp); 
-  ABSOLUTE_NUMBER=int(date+""+(int)random(10, 99));
+  NUMBER_OF_SESSIONS+=1;
+  ABSOLUTE_NUMBER=int(date+""+NUMBER_OF_SESSIONS);
 }
 
 
@@ -208,5 +185,60 @@ public boolean surfaceTouchEvent(MotionEvent event) {
 
   //forward event to class for processing
   return gesture.surfaceTouchEvent(event);
+}
+
+
+
+/*******************************************
+ GENERIC SAVE STRING ON FILE AND WEB
+ ********************************************/
+boolean saveStringOnTheWeb(String URL, String newData)
+{
+  return false;
+}
+boolean makeHTTPGET(String URL)
+{
+  try {
+    String []c=loadStrings(URL);
+    println("success");
+    println(c);
+    return true;
+  }
+  catch(Exception e)
+  {
+
+    println("MAKE_HTTP_GET:"+e);
+    return false;
+  }
+}
+boolean saveStringToFile(String outFileName, String newData)
+{
+  // PrintWriter pw = null;
+  BufferedWriter writer;
+  try 
+  {
+    //pw = createWriter(outFileName); 
+    writer = new BufferedWriter(new FileWriter(outFileName, true));
+    //pw.println(newData);
+    writer.write(newData+"\r\n");
+    writer.close();
+    return true;
+  } 
+  catch (Exception e) 
+  {
+    // Report problem or handle it
+    println("SAVE_STRING_TO_FILE:"+e);
+    return false;
+  }
+  finally
+  {
+    /*if (writer != null)
+     {*/
+    /*
+      pw.flush(); 
+     pw.close();*/
+
+    //}
+  }
 }
 
