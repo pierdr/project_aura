@@ -1,0 +1,126 @@
+2013-2-27 14:49:42 :: java.lang.IllegalArgumentException: Illegal character in query at index 96: http://www.pierdr.com/ciid/06_GD/AURA.php?save_user=pierdr&session=2013022897&version=1077&data=
+55.684227,12.593901,2013-2-27 14:49:42,auto
+2013-2-27 14:49:59 :: java.lang.IllegalArgumentException: Illegal character in query at index 96: http://www.pierdr.com/ciid/06_GD/AURA.php?save_user=pierdr&session=2013022897&version=1078&data=
+55.684227,12.593901,2013-2-27 14:49:42,auto
+55.68265,12.593333,2013-2-27 14:49:59,auto
+2013-2-27 14:50:0 :: java.lang.IllegalArgumentException: Illegal character in query at index 96: http://www.pierdr.com/ciid/06_GD/AURA.php?save_user=pierdr&session=2013022897&version=1079&data=
+55.684227,12.593901,2013-2-27 14:49:42,auto
+55.68265,12.593333,2013-2-27 14:49:59,auto
+55.68248,12.593406,2013-2-27 14:50:0,auto
+2013-2-27 14:50:2 :: java.lang.IllegalArgumentException: Illegal character in query at index 96: http://www.pierdr.com/ciid/06_GD/AURA.php?save_user=pierdr&session=2013022897&version=1080&data=
+55.684227,12.593901,2013-2-27 14:49:42,auto
+55.68265,12.593333,2013-2-27 14:49:59,auto
+55.68248,12.593406,2013-2-27 14:50:0,auto
+55.68291,12.593379,2013-2-27 14:50:2,auto
+2013-2-27 14:50:3 :: java.lang.IllegalArgumentException: Illegal character in query at index 96: http://www.pierdr.com/ciid/06_GD/AURA.php?save_user=pierdr&session=2013022897&version=1081&data=
+55.684227,12.593901,2013-2-27 14:49:42,auto
+55.68265,12.593333,2013-2-27 14:49:59,auto
+55.68248,12.593406,2013-2-27 14:50:0,auto
+55.68291,12.593379,2013-2-27 14:50:2,auto
+55.682724,12.593449,2013-2-27 14:50:3,auto
+2013-2-27 14:50:14 :: java.lang.IllegalArgumentException: Illegal character in query at index 96: http://www.pierdr.com/ciid/06_GD/AURA.php?save_user=pierdr&session=2013022897&version=1082&data=
+55.684227,12.593901,2013-2-27 14:49:42,auto
+55.68265,12.593333,2013-2-27 14:49:59,auto
+55.68248,12.593406,2013-2-27 14:50:0,auto
+55.68291,12.593379,2013-2-27 14:50:2,auto
+55.682724,12.593449,2013-2-27 14:50:3,auto
+55.682922,12.59319,2013-2-27 14:50:14,auto
+2013-2-27 14:50:15 :: java.lang.IllegalArgumentException: Illegal character in query at index 96: http://www.pierdr.com/ciid/06_GD/AURA.php?save_user=pierdr&session=2013022897&version=1083&data=
+55.684227,12.593901,2013-2-27 14:49:42,auto
+55.68265,12.593333,2013-2-27 14:49:59,auto
+55.68248,12.593406,2013-2-27 14:50:0,auto
+55.68291,12.593379,2013-2-27 14:50:2,auto
+55.682724,12.593449,2013-2-27 14:50:3,auto
+55.682922,12.59319,2013-2-27 14:50:14,auto
+55.682922,12.59319,2013-2-27 14:50:15,auto
+2013-2-27 15:7:23 :: java.lang.NullPointerException
+2013-2-27 15:17:43 :: success:
+[Ljava.lang.String;@413c6958
+2013-2-27 15:18:8 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:18:20 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:18:21 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:18:22 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:18:23 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:18:24 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:18:25 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:18:26 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:18:27 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:18:28 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:18:41 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:22:57 :: success:
+[Ljava.lang.String;@413b52a8
+2013-2-27 15:58:22 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:58:32 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:58:41 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:58:50 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:58:59 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:59:8 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:59:31 :: android.os.NetworkOnMainThreadException
+2013-2-27 15:59:42 :: android.os.NetworkOnMainThreadException
+2013-2-27 16:0:16 :: android.os.NetworkOnMainThreadException
+2013-2-27 16:0:25 :: android.os.NetworkOnMainThreadException
+2013-2-27 16:0:44 :: android.os.NetworkOnMainThreadException
+2013-2-27 16:7:9 :: android.os.NetworkOnMainThreadException
+2013-2-27 16:13:50 :: android.os.NetworkOnMainThreadException
+2013-2-27 16:58:4 :: success:
+[Ljava.lang.String;@413a5970
+2013-2-27 16:58:5 :: success:
+[Ljava.lang.String;@413b6160
+2013-2-27 17:10:4 :: android.os.NetworkOnMainThreadException
+2013-2-27 17:10:4 :: android.os.NetworkOnMainThreadException
+2013-2-27 17:10:5 :: java.lang.IllegalArgumentException: Illegal character in query at index 65: http://www.pierdr.com/ciid/06_GD/AURA.php?user=pierdr&save_point=
+55.682194,12.592891
+2013-2-27 17:10:5 :: android.os.NetworkOnMainThreadException
+2013-2-27 17:10:6 :: java.lang.IllegalArgumentException: Illegal character in query at index 65: http://www.pierdr.com/ciid/06_GD/AURA.php?user=pierdr&save_point=
+55.682194,12.592891
+55.68218,12.592891
+2013-2-27 17:10:6 :: android.os.NetworkOnMainThreadException
+2013-2-27 17:10:19 :: java.lang.IllegalArgumentException: Illegal character in query at index 65: http://www.pierdr.com/ciid/06_GD/AURA.php?user=pierdr&save_point=
+55.682194,12.592891
+55.68218,12.592891
+55.682167,12.592919
+2013-2-27 17:10:19 :: android.os.NetworkOnMainThreadException
+2013-2-27 17:10:20 :: java.lang.IllegalArgumentException: Illegal character in query at index 65: http://www.pierdr.com/ciid/06_GD/AURA.php?user=pierdr&save_point=
+55.682194,12.592891
+55.68218,12.592891
+55.682167,12.592919
+55.68228,12.592965
+2013-2-27 17:10:20 :: android.os.NetworkOnMainThreadException
+2013-2-27 17:10:21 :: java.lang.IllegalArgumentException: Illegal character in query at index 65: http://www.pierdr.com/ciid/06_GD/AURA.php?user=pierdr&save_point=
+55.682194,12.592891
+55.68218,12.592891
+55.682167,12.592919
+55.68228,12.592965
+55.68228,12.592965
+2013-2-27 17:10:21 :: android.os.NetworkOnMainThreadException
+2013-2-27 17:10:22 :: java.lang.IllegalArgumentException: Illegal character in query at index 65: http://www.pierdr.com/ciid/06_GD/AURA.php?user=pierdr&save_point=
+55.682194,12.592891
+55.68218,12.592891
+55.682167,12.592919
+55.68228,12.592965
+55.68228,12.592965
+55.68228,12.592965
+2013-2-27 17:10:22 :: android.os.NetworkOnMainThreadException
+2013-2-27 17:10:23 :: java.lang.IllegalArgumentException: Illegal character in query at index 65: http://www.pierdr.com/ciid/06_GD/AURA.php?user=pierdr&save_point=
+55.682194,12.592891
+55.68218,12.592891
+55.682167,12.592919
+55.68228,12.592965
+55.68228,12.592965
+55.68228,12.592965
+55.68228,12.592965
+2013-2-27 17:10:23 :: android.os.NetworkOnMainThreadException
+2013-2-27 17:10:24 :: java.lang.IllegalArgumentException: Illegal character in query at index 65: http://www.pierdr.com/ciid/06_GD/AURA.php?user=pierdr&save_point=
+55.682194,12.592891
+55.68218,12.592891
+55.682167,12.592919
+55.68228,12.592965
+55.68228,12.592965
+55.68228,12.592965
+55.68228,12.592965
+55.68228,12.592965
+2013-2-27 17:10:24 :: android.os.NetworkOnMainThreadException
+2013-2-27 17:29:56 :: success:
+[Ljava.lang.String;@413bd8e8
+2013-2-27 17:29:57 :: success:
+[Ljava.lang.String;@413cde40

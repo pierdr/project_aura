@@ -100,10 +100,3 @@ void updateConfigFile()
 }
 //end config methods
 
-void init()
-{
-  keyPoints=new ArrayList<PVector>();
-  pointsInSession=new ArrayList<PVector>();
-  backgroundPoints=new ArrayList<PVector>();
-}
-

@@ -90,3 +90,19 @@ float dataBoundsTopLat=0;
 float dataBoundsRightLon=0;
 float dataBoundsLeftLon=0;
 float dataBoundsBottomLat=0;
+
+/********
+UI
+*********/
+SButton sbT;
+
+
+void init()
+{
+  keyPoints=new ArrayList<PVector>();
+  pointsInSession=new ArrayList<PVector>();
+  backgroundPoints=new ArrayList<PVector>();
+  sbT=new SButton(displayWidth-100,displayHeight-50,100,50,color(240,210,245),"reset");
+  logMessage("message");
+}
+

@@ -9,7 +9,7 @@
 
 boolean loadLocationData()
 {
-  println("LOADING DATA");
+  
   try {
     if (loadBackground() && loadKeyPointsInCurrentSession())
     {
@@ -32,6 +32,7 @@ boolean loadBackground()
   try {
     String url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
     url+="?get_user="+GLOBAL_NAME;
+    
     s=loadStrings(url);
   }
   catch(Exception e) {
@@ -41,6 +42,7 @@ boolean loadBackground()
     if (s.length==0)
     {
       try {
+        
         String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();  
         File file = new File(SDCARD + File.separator + "global_point_"+GLOBAL_NAME+".txt"); 
         s = loadStrings(file.getPath());
@@ -50,15 +52,33 @@ boolean loadBackground()
         println("LOAD_BACKGROUND_FROM_FILE:"+e);
         return false;
       }
-      for (int i = 0; i < s.length; i++) {
-        String []tmp=split(s[i], ",");
+    }
+    for (int i = 0; i < s.length; i++) {
+      String []tmp=split(s[i], ",");
+      if(tmp.length>1)
+      {
         PVector tmpV=new PVector(float(tmp[0]), float(tmp[1]));
+        if(tmpV.x>dataBoundsTopLat)
+        {
+          dataBoundsTopLat=tmpV.x;
+        }
+        if(tmpV.x<dataBoundsBottomLat)
+        {
+          dataBoundsBottomLat=tmpV.x;
+        }
+        if(tmpV.y>dataBoundsRightLon)
+        {
+          dataBoundsRightLon=tmpV.y;
+        }
+        if(tmpV.y<dataBoundsLeftLon)
+        {
+          dataBoundsLeftLon=tmpV.x;
+        }
         backgroundPoints.add(tmpV);
       }
-      return true;
     }
-
-    return false;
+    println("("+dataBoundsTopLat+","+dataBoundsRightLon+","+dataBoundsBottomLat+","+dataBoundsLeftLon+")");
+    return true;
   }
 }
 
@@ -113,7 +133,7 @@ boolean loadKeyPointsInCurrentSession()
       {
         println(e);
       }
-      
+
       return true;
     }
 

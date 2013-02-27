@@ -70,20 +70,9 @@ void draw()
   {
     
     drawBackground();
-    
-    try { 
-      fill(0);
-      textSize(30);
-      text("Distance:"+dist +"\n"+
-        "Velocity:"+ vel+
-        "\nTotal Distance:"+dist_total+"\n Size:"+places.size()+"\nGlobal_counter:"+VERSION_COUNTER+"\nName: "
-        +GLOBAL_NAME+"\nAbsolute_number:"+ABSOLUTE_NUMBER, 100, 100);
-    }
-    catch(Exception e)
-    {
-      println("DRAW:"+e);
-    }
-    redraw=false;
+    debugDraw();
+    UIDraw();
+    redraw=true;
   }
 }
 
@@ -120,8 +109,6 @@ void onLocationEvent(double _latitude, double _longitude, double _altitude)
   
   redraw=true;
 }
-
-
 
 void exit()
 {

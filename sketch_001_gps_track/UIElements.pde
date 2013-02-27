@@ -5,13 +5,19 @@ class SButton {
   color c;
   boolean prs;
   String name;
-  public SButton(int x, int y, int w, int h, color c1, String name)
+  public SButton(int x, int y, int w, int h, color cx, String name)
   {
     this.name=name;
+    pos=new SPoint(x, y);
+    dim=new SPoint(w, h);
+    prs=false;
+    c=cx;
+  }
+  public SButton(int x,int y)
+  {
+    this.dim=new SPoint(100,50);
     this.pos=new SPoint(x, y);
-    this.dim=new SPoint(w, h);
-    this.prs=false;
-    this.c=c1;
+    this.name="button";
   }
   public boolean pressed()
   {
@@ -50,6 +56,7 @@ class SButton {
     text(name,this.pos.x+40, this.pos.y+80);
   }
 }
+
 
 class SPoint {
   int x;
