@@ -107,7 +107,7 @@ void draw()
       {
         point(tmp.x,tmp.y);
       }
-      if(true)
+      if(false)
       {
         vertex(tmp.x,tmp.y);
       }
