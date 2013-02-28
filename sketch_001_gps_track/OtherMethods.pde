@@ -27,10 +27,10 @@ public boolean surfaceTouchEvent(MotionEvent event) {
 void listenToMouseDown(int x, int y)
 {
   //UIEventListeners
-  if (buttonNewSession.mouseDown(x,y))
+  /*if (buttonNewSession.mouseDown(x,y))
   {
     newSession();
-  }
+  }*/
   if(buttonTakePhoto.mouseDown(x,y))
   {
     

@@ -1,59 +1,148 @@
-//import ketai.sensors.*;
-//import android.os.Environment;
-//import java.io.File;
+import megamu.mesh.*;
 
 
-///////////////////////////////////////////////////////////////////////////
+ArrayList<pt> points;
 
 int vn =5;                       // number of points (sites)
-int cap=100;                    // max number of points
-pt[] P = new pt [cap];          // Array containing the points
-int bi=-1;                      // index of selected mouse-vertex, -1 if none selected
+int cap;                     // max number of points
+pt[] P;                          // Array containing the points
+int bi=-1;                       // index of selected mouse-vertex, -1 if none selected
 pt Mouse = new pt(0, 0);         // current mouse position
-color black = color(0, 10, 10); 
-color blue = color(10, 10, 200); 
-color grey = color(0, 5, 0);
 boolean redraw;
-boolean dots = false;           // toggles display circle centers
-boolean numbers = false;         // toggles display of vertex numbers 
+boolean dots = false;            // toggles display circle centers
+boolean numbers = false;         // toggles display of vertex numbers
+int index=0;
+Delaunay myDelaunay;
 
-void setup() {   
-  size(700, 700);  
+void setup()
+{
+  points=new ArrayList<pt>();
+  String [] s=loadStrings("points_cph.csv");
+  float boundsTopLat=0, boundsRightLon=0, boundsBottomLat=0, boundsLeftLon=0;
+  for (int i=0;i<s.length;i++) {
+
+    String[] sTmp=split(s[i], ",");
+    if (sTmp.length>1)
+    {
+
+      if (boundsBottomLat==0 && boundsLeftLon==0)
+      {
+        boundsBottomLat=float(sTmp)[0];
+        boundsLeftLon=float(sTmp)[1];
+      }
+
+      if (float(sTmp[0])>boundsTopLat)
+      {
+        boundsTopLat=float(sTmp)[0];
+      }
+      if (float(sTmp[0])<boundsBottomLat)
+      {
+        boundsBottomLat=float(sTmp)[0];
+      }
+      if (float(sTmp[1])>boundsRightLon)
+      {
+        boundsRightLon=float(sTmp)[1];
+      }
+      if (float(sTmp[1])<boundsLeftLon)
+      {
+        boundsLeftLon=float(sTmp)[1];
+      }
+    }
+  }
+  println(boundsTopLat+" "+boundsRightLon+" "+boundsBottomLat+" "+boundsLeftLon);
+  map =new MercatorMap(displayWidth-200, displayHeight-200, boundsTopLat, boundsBottomLat, boundsLeftLon, boundsRightLon );
+  float[][] points_matrix = new float[s.length][2];
+  for (int i=0;i<s.length;i++) {
+
+    String[] sTmp=split(s[i], ",");
+    if (sTmp.length>1)
+    {
+
+      PVector pTmp=map.getScreenLocation(new PVector(float(sTmp[0]), float(sTmp[1])));
+      points.add(new pt(pTmp.x, pTmp.y));
+      points_matrix[i][0] = pTmp.x+100;
+      points_matrix[i][1] = pTmp.y+100;
+       println(points_matrix[i]);
+    }
+  }
+ 
+
+  myDelaunay = new Delaunay( points_matrix );
+
+  println(points.size());
+  size(displayWidth, displayHeight);  
   strokeJoin(ROUND); 
   strokeCap(ROUND);
   setuppixelImage();
-  
+  P=new pt[points.size()];
+  cap=points.size();
   for (int i=0; i<cap; i++) {
     P[i]=new pt(0, 0);
   };      // creates all points
-  
+
   for (int i=0; i<vn; i++) {
     P[i]=new pt(random(width), random(height));
   };  // makes the first vn poits random
+
+  //noFill();
+  redraw=true;
   
-  noFill();
-} 
+}
 
-
-///////////////////////////////////////////////////////////////////////////
-
-
-void draw() { 
+void draw()
+{
   if (redraw) {   
-  background(255); 
-  if (bi!= -1) {
-    P[bi].setFromMouse();
-  };                    // snap selected vertex to mouse position during dragging
-  drawTriangles();
-//  drawPoints();
-  redraw = false;
+  // translate(0,-500);
+    //scale(1,2);
+    background(255); 
+    if (bi!= -1) {
+      P[bi].setFromDataSet();
+    };                    // snap selected vertex to mouse position during dragging
+    //drawTriangles();
+    beginShape();
+    for(int i=0;i<points.size();i++)
+    {
+      pt tmp=points.get(i);
+      if(false)
+      {
+        point(tmp.x,tmp.y);
+      }
+      if(true)
+      {
+        vertex(tmp.x,tmp.y);
+      }
+      if(i<points.size()-1 && false)
+      {
+        pt tmp1=points.get(i+1);
+        line(tmp.x,tmp.y,tmp1.x,tmp1.y);
+      }  
   }
-};
+  endShape(CLOSE);
+    
+    float[][] myEdges = myDelaunay.getEdges();
+   
+    for (int i=0; i<myEdges.length; i++)
+    {
+       fill(100,50);
+      stroke(100,50);
+      float startX = myEdges[i][0];
+      float startY = myEdges[i][1];
+      float endX = myEdges[i][2];
+      float endY = myEdges[i][3];
+      line( startX, startY, endX, endY );
+      
+    }
+
+    //  drawPoints();
+    redraw = false;
+  }
+}
+
 
 void drawTriangles() { 
   pt X = new pt(0, 0);
   float r=1;
-  
+
   for (int i=0; i<vn-2; i++) {
     for (int j=i+1; j<vn-1; j++) {
       for (int k=j+1; k<vn; k++) {
@@ -66,12 +155,12 @@ void drawTriangles() {
           }
         };
         if (!found) {
- 
+
           noStroke();
-          color a = lerpColor(P[i].c, P[j].c, 0.5);
-          color f = lerpColor(a, P[k].c, 0.5);        
+          color a = lerpColor(P[i].c, P[j].c, 0.2);
+          color f = lerpColor(a, P[k].c, 0.2);        
           fill(f);
-          
+
           beginShape(POLYGON);  
           P[i].vert(); 
           P[j].vert(); 
@@ -111,7 +200,7 @@ pt centerCC (pt A, pt B, pt C) {    // computes the center of a circumscirbing c
 void mousePressed() {  // to do when mouse is pressed  
   redraw = true;
   float bd=sq(width/5);                                                       // init square of smallest distance to selected point
-  Mouse.setFromMouse();                                                 // save current mouse location
+  Mouse.setFromDataSet();                                                 // save current mouse location
   for (int i=0; i<vn; i++) { 
     if (d2(i)<bd) {
       bd=d2(i); 
@@ -120,13 +209,12 @@ void mousePressed() {  // to do when mouse is pressed
   };      // select closeest vertex
   if (bd>10) { 
     bi=vn++;  
-    P[bi].setFromMouse();                          // if closest vertex is too far
+    P[bi].setFromDataSet();                          // if closest vertex is too far
     P[bi].setColor(pixel_color(myImage));
   };
-  
- int scaledMouseX = mouseX / imageScale;
-  int scaledMouseY = mouseY / imageScale;
- 
+  index++;
+  //int scaledMouseX = mouseX / imageScale;
+  //int scaledMouseY = mouseY / imageScale;
 }
 
 
@@ -223,9 +311,4 @@ void loadPts() {
     P[i]=new pt (float(ss[s].substring(0, comma)), float(ss[s].substring(comma+1, ss[s].length())));
   };
 };
-
-
-
-
-
 

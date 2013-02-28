@@ -23,12 +23,13 @@ void setup()
     ABSOLUTE_ID=(date+""+NUMBER_OF_SESSIONS);
   }
   updateConfigFile();
+  
   init();
   loadLocationData();
   try {
     //float mapScreenWidth, float mapScreenHeight, float topLatitude, float bottomLatitude, float leftLongitude, float rightLongitude) {
-    // map =new MercatorMap(MAP_WIDTH, MAP_HEIGHT, TOP_LAT, BOTTOM_LAT, LEFT_LON, RIGHT_LON );
-    //map_background=loadImage("project_aura.png");
+    map =new MercatorMap(MAP_WIDTH, MAP_HEIGHT, TOP_LAT, BOTTOM_LAT, LEFT_LON, RIGHT_LON );
+    map_background=loadImage("project_aura.png");
     me_pixel=new PVector(0, 0);
     me=new PVector(0, 0); 
     gesture = new KetaiGesture(this);
@@ -40,12 +41,6 @@ void setup()
   }
   background(255);
 }
-
-
-
-
-
-
 
 void simulator() {
   if (millis()-tack>1000 && index< coords.length && simulation)
@@ -65,15 +60,13 @@ void draw()
   //draw methods
   if (redraw)
   {
-    background(255);
-   
+      background(255);
+      image(map_background,0,0);
       drawBackground();
       debugDraw();
       drawShape();
       UIDraw();
       redraw=true;
-   
-   
   }
 }
 
@@ -102,7 +95,6 @@ void onLocationEvent(double _latitude, double _longitude, double _altitude)
         float dt=(float)(millis()-tick);
         vel=dist/dt;
       }
-
       me_last=new PVector(me.x, me.y);
       saveLocationData(false, false);
     }

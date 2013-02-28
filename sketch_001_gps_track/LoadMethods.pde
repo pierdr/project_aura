@@ -13,8 +13,8 @@ boolean loadLocationData()
   try {
     if (loadBackground() && loadKeyPointsInCurrentSession())
     {
-         println("("+dataBoundsTopLat+","+dataBoundsRightLon+","+dataBoundsBottomLat+","+dataBoundsLeftLon+")");
-        map =new MercatorMap(MAP_WIDTH, MAP_HEIGHT, dataBoundsTopLat, dataBoundsBottomLat, dataBoundsLeftLon, dataBoundsRightLon );
+       println("("+dataBoundsTopLat+","+dataBoundsRightLon+","+dataBoundsBottomLat+","+dataBoundsLeftLon+")");
+       //map =new MercatorMap(displayWidth,displayHeight, dataBoundsTopLat, dataBoundsBottomLat, dataBoundsLeftLon, dataBoundsRightLon );
       return true;
     }
   }
@@ -35,30 +35,6 @@ boolean loadBackground()
     String url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
     url+="?get_user="+GLOBAL_NAME;
     s=loadStrings(url);
-    
-    /*
-    url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
-     url+="?get_paths_name="+"true";
-     String []pathsName=loadStrings(url);
-     
-     for (int i=0;i<pathsName.length;i++)
-     {
-     if (pathsName[i]!="")
-     {
-     url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
-     url+="?get_path="+pathsName[i];
-     String []path=loadStrings(url);
-     backgroundPaths.add(new Path(path.length));
-     for (int j = 0; j < path.length; j++) {
-     String []tmp=split(path[j], ",");
-     if (tmp.length>1)
-     {
-     Coord tmpC=new Coord(float(tmp[0]), float(tmp[1]));
-     backgroundPaths.get(i).setElem(j, tmpC);
-     }
-     }
-     }
-     }*/
   }
   catch(Exception e) {
     println("LOAD_BACKGROUND_FROM_WEB"+e);
@@ -67,7 +43,6 @@ boolean loadBackground()
     if (s.length==0)
     {
       try {
-
         String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();  
         File file = new File(SDCARD + File.separator + "global_point_"+GLOBAL_NAME+".txt"); 
         s = loadStrings(file.getPath());

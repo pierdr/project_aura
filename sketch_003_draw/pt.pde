@@ -26,6 +26,11 @@ class pt {
     x = mouseX; 
     y = mouseY;
   }; 
+  void setFromDataSet()
+  {
+    x  =  points.get(index).x ;
+    y  =  points.get(index).y ;
+  }
 
   void setColor(color newcolor) {
     c = newcolor;

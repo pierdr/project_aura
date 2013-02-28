@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <data>
-	<info field="name" value="pierdr" />
+	<info field="name" value="jane" />
 	<info field="counter" value="0"/>
 	<info field="absolute_number" value="-1"/>
 	<info field="number_of_sessions" value="-1"/>

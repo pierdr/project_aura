@@ -37,11 +37,16 @@ void saveLocationData(boolean whole, boolean user)
 
 
     saveStringToFile(SDCARD + File.separator + "gps_track_"+ABSOLUTE_ID+".txt", s1);
-
+    
+    if(user)
+    {
+      keyPoints.add(me);
+    }
     /***********
      save data for background
      *****************/
-
+    userBackgroundPoints.add(me);
+    pointsInSession.add(me);
     String sG=me.x+","+me.y;
     saveStringToFile(SDCARD + File.separator + "global_point_"+GLOBAL_NAME+".txt", sG);
 

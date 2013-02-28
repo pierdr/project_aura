@@ -45,6 +45,19 @@ KetaiGesture gesture;
 
 boolean redraw=true;
 
+//IMAGES
+PImage background;
+color selectedColor;
+ArrayList allColors;
+
+
+int vn =5;                       // number of points (sites)
+int cap=100;                     // max number of points
+pt[] P = new pt [cap];           // Array containing the points
+int bi=-1;                       // index of selected mouse-vertex, -1 if none selected
+pt Mouse = new pt(0, 0);         // current mouse position
+//-----
+
 boolean simulation=false;
 
 float dist         = 0;
@@ -108,6 +121,9 @@ void init()
   pointsInSession=new ArrayList<PVector>();
   userBackgroundPoints=new ArrayList<PVector>();
   backgroundPaths=new ArrayList<Path>();
+  
+  background = loadImage("arizona_350x500.jpg");
+  allColors = new ArrayList();
   
   buttonNewSession=new SButton(displayWidth-200,(displayHeight/2)-320,250,100,color(240,210,245),"new session");
   buttonPin=new SButton(displayWidth-200,(displayHeight/2)-210,200,100,color(240,210,245),"pin");
