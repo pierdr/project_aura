@@ -5,44 +5,41 @@ void setup()
   size(displayWidth, displayHeight);
   frameRate(1);
   loadConfigFile();
+  
   //set number of sessions
-  if (NUMBER_OF_SESSIONS<100)
+  if (NUMBER_OF_SESSIONS<10 || NUMBER_OF_SESSIONS>99)
   {
-    NUMBER_OF_SESSIONS=100;
+    NUMBER_OF_SESSIONS=10;
   }
+  
   //set absolute number
-  if (ABSOLUTE_NUMBER==-1)
+  if (int(ABSOLUTE_ID)==0 || int(ABSOLUTE_ID)==-1)
   {
     Date d = new Date();
     long timestamp = d.getTime() + (86400000 ); 
     String date = new java.text.SimpleDateFormat("yyyyMMdd").format(timestamp); 
-    ABSOLUTE_NUMBER=0;
-    ABSOLUTE_NUMBER=int(date+""+NUMBER_OF_SESSIONS);
+    ABSOLUTE_ID="0";
+    println("ABSOLUTE ID"+ABSOLUTE_ID);
+    ABSOLUTE_ID=(date+""+NUMBER_OF_SESSIONS);
   }
+  updateConfigFile();
+  init();
+  loadLocationData();
   try {
     //float mapScreenWidth, float mapScreenHeight, float topLatitude, float bottomLatitude, float leftLongitude, float rightLongitude) {
-    map =new MercatorMap(MAP_WIDTH, MAP_HEIGHT, TOP_LAT, BOTTOM_LAT, LEFT_LON, RIGHT_LON );
-    map_background=loadImage("project_aura.png");
+   // map =new MercatorMap(MAP_WIDTH, MAP_HEIGHT, TOP_LAT, BOTTOM_LAT, LEFT_LON, RIGHT_LON );
+    //map_background=loadImage("project_aura.png");
     me_pixel=new PVector(0, 0);
     me=new PVector(0, 0); 
     gesture = new KetaiGesture(this);
-
-    if (simulation)
-    {
-      loadPointsFromFile();
-    }
-    else
-    {
-      location=new KetaiLocation(this);
-    }
+    location=new KetaiLocation(this);
+    
   }
   catch(Exception e)
   {
     println("SETUP:" +e);
   }
-  updateConfigFile();
-  init();
-  loadLocationData();
+  background(255);
 }
 
 
@@ -66,14 +63,17 @@ void simulator() {
 
 void draw()
 {
+  //draw methods
   if (redraw)
   {
+    background(255);
     
     drawBackground();
     debugDraw();
     UIDraw();
     redraw=true;
   }
+  
 }
 
 void onLocationEvent(double _latitude, double _longitude, double _altitude)

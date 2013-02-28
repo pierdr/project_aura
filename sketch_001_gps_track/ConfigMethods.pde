@@ -23,6 +23,7 @@ void loadConfigFile()
     String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     xml=loadXML(SDCARD + File.separator + GLOBAL_NAME+"_config.xml");
     infos = xml.getChildren("info");
+    println(xml);
     for ( int i = 0; i < infos.length; i++)
     {
       String field = infos[i].getString("field");
@@ -36,7 +37,7 @@ void loadConfigFile()
 
         if (infos[i].getInt("value")!=-1)
         {
-          ABSOLUTE_NUMBER=infos[i].getInt("value");
+          ABSOLUTE_ID=infos[i].getString("value");
           //println("session id (alias ABSOLUTE_NUMBER):"+ABSOLUTE_NUMBER);
         }
       }
@@ -76,7 +77,7 @@ void updateConfigFile()
       }
       else if (field.equals("absolute_number"))
       {
-        infos[i].setInt("value", ABSOLUTE_NUMBER);
+        infos[i].setString("value", ABSOLUTE_ID);
       }
       else if (field.equals("number_of_sessions"))
       {

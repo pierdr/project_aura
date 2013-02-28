@@ -19,7 +19,7 @@ class SButton {
     this.pos=new SPoint(x, y);
     this.name="button";
   }
-  public boolean pressed()
+  public boolean mouseDown()
   {
     if (mousePressed)
     {
@@ -32,6 +32,7 @@ class SButton {
         this.c=color(red(this.c)+50, green(this.c)+50, blue(this.c)+50);
         this.prs=true;
         ret=true;
+        redraw=true;
       }
       return ret;
     }
@@ -41,6 +42,35 @@ class SButton {
       {
         this.c=color(red(this.c)-50, green(this.c)-50, blue(this.c)-50);
         this.prs=false;
+        redraw=true;
+      }
+      return false;
+    }
+  }
+   public boolean mouseDown(int x, int y)
+  {
+    if (mousePressed)
+    {
+
+      boolean ret=false;
+      
+      if ((x>this.pos.x && x<(this.pos.x+this.dim.x)) && (y>this.pos.y && y<(this.pos.y+ this.dim.y)) && !this.prs)
+      {
+        //println(name+": tap("+x+", " +y+")  pos("+pos.x+","+pos.y+") dim("+dim.x+","+dim.y+") sum("+(pos.x+dim.x)+","+(pos.y+dim.y)+")");
+        this.c=color(red(this.c)+50, green(this.c)+50, blue(this.c)+50);
+        this.prs=true;
+        ret=true;
+        redraw=true;
+      }
+      return ret;
+    }
+    else
+    {
+      if (this.prs)
+      {
+        this.c=color(red(this.c)-50, green(this.c)-50, blue(this.c)-50);
+        this.prs=false;
+        redraw=true;
       }
       return false;
     }
@@ -51,6 +81,8 @@ class SButton {
     noStroke();
     rect(this.pos.x, this.pos.y, this.dim.x, this.dim.y);
     fill(200);
+    stroke(0);
+    
     textAlign(LEFT);
     textSize(30);
     text(name,this.pos.x+40, this.pos.y+80);

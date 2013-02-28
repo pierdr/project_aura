@@ -5,12 +5,12 @@
  * (c) 2011 Till Nagel, tillnagel.com
  */
 public class MercatorMap {
-  
+
   public static final float DEFAULT_TOP_LATITUDE = 80;
   public static final float DEFAULT_BOTTOM_LATITUDE = -80;
   public static final float DEFAULT_LEFT_LONGITUDE = -180;
   public static final float DEFAULT_RIGHT_LONGITUDE = 180;
-  
+
   /** Horizontal dimension of this map, in pixels. */
   protected float mapScreenWidth;
   /** Vertical dimension of this map, in pixels. */
@@ -33,7 +33,7 @@ public class MercatorMap {
   public MercatorMap(float mapScreenWidth, float mapScreenHeight) {
     this(mapScreenWidth, mapScreenHeight, DEFAULT_TOP_LATITUDE, DEFAULT_BOTTOM_LATITUDE, DEFAULT_LEFT_LONGITUDE, DEFAULT_RIGHT_LONGITUDE);
   }
-    
+
   /**
    * Creates a new MercatorMap with dimensions and bounding box to convert between geo-locations and screen coordinates.
    *
@@ -78,7 +78,7 @@ public class MercatorMap {
   protected float getScreenY(float latitudeInDegrees) {
     return mapScreenHeight * (getScreenYRelative(latitudeInDegrees) - topLatitudeRelative) / (bottomLatitudeRelative - topLatitudeRelative);
   }
-  
+
   private float getRadians(float deg) {
     return deg * PI / 180;
   }
@@ -137,5 +137,71 @@ float distance_world_mercator(PVector lat_lon_0, PVector lat_lon_1) {
 
 float to_radians(float deg) {
   return deg * PI / 180;
+}
+
+class Coord
+{
+  float lat;
+  float lon;
+  Coord(float la, float lo)
+  {
+    lat=la;
+    lon=lo;
+  }
+}
+class Path {
+  private Coord[] coordA;
+  private boolean al;
+  private ArrayList<Coord> coordAL;
+  public Path()
+  {
+    al=true;
+    coordAL=new ArrayList<Coord>();
+  }
+  public Path(int dim)
+  {
+    al=false;
+    coordA=new Coord[dim];
+  }
+  public Coord getElem(int i)
+  {
+    if (al)
+    {
+      return coordAL.get(i);
+    }
+    else
+    {
+      return coordA[i];
+    }
+  }
+  public boolean setElem(int i, Coord c)
+  {
+    try {
+      if (al)
+      {
+        coordAL.add(i, c);
+      }
+      else
+      {
+        coordA[i]=c;
+      }
+      return true;
+    }
+    catch(Exception e)
+    {
+      return false;
+    }
+  }
+  public int size()
+  {
+    if (al)
+      {
+        return coordAL.size();
+      }
+      else
+      {
+        return coordA.length;
+      }
+  }
 }
 

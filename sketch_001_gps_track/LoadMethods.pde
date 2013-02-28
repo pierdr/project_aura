@@ -9,7 +9,7 @@
 
 boolean loadLocationData()
 {
-  
+
   try {
     if (loadBackground() && loadKeyPointsInCurrentSession())
     {
@@ -32,8 +32,30 @@ boolean loadBackground()
   try {
     String url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
     url+="?get_user="+GLOBAL_NAME;
-    
     s=loadStrings(url);
+
+    url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
+    url+="?get_paths_name="+"true";
+    String []pathsName=loadStrings(url);
+
+    for (int i=0;i<pathsName.length;i++)
+    {
+      if (pathsName[i]!="")
+      {
+         url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
+        url+="?get_path="+pathsName[i];
+        String []path=loadStrings(url);
+        backgroundPaths.add(new Path(path.length));
+        for (int j = 0; j < path.length; j++) {
+          String []tmp=split(path[j], ",");
+          if (tmp.length>1)
+          {
+            Coord tmpC=new Coord(float(tmp[0]), float(tmp[1]));
+            backgroundPaths.get(i).setElem(j, tmpC);
+          }
+        }
+      }
+    }
   }
   catch(Exception e) {
     println("LOAD_BACKGROUND_FROM_WEB"+e);
@@ -42,7 +64,7 @@ boolean loadBackground()
     if (s.length==0)
     {
       try {
-        
+
         String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();  
         File file = new File(SDCARD + File.separator + "global_point_"+GLOBAL_NAME+".txt"); 
         s = loadStrings(file.getPath());
@@ -55,29 +77,37 @@ boolean loadBackground()
     }
     for (int i = 0; i < s.length; i++) {
       String []tmp=split(s[i], ",");
-      if(tmp.length>1)
+      if (tmp.length>1)
       {
-        PVector tmpV=new PVector(float(tmp[0]), float(tmp[1]));
-        if(tmpV.x>dataBoundsTopLat)
+        Coord tmpC=new Coord(float(tmp[0]), float(tmp[1]));
+
+        if (dataBoundsBottomLat==0 && dataBoundsLeftLon==0)
         {
-          dataBoundsTopLat=tmpV.x;
+          dataBoundsBottomLat=tmpC.lat;
+          dataBoundsLeftLon=tmpC.lon;
         }
-        if(tmpV.x<dataBoundsBottomLat)
+
+        if (tmpC.lat>dataBoundsTopLat)
         {
-          dataBoundsBottomLat=tmpV.x;
+          dataBoundsTopLat=tmpC.lat;
         }
-        if(tmpV.y>dataBoundsRightLon)
+        if (tmpC.lat<dataBoundsBottomLat)
         {
-          dataBoundsRightLon=tmpV.y;
+          dataBoundsBottomLat=tmpC.lat;
         }
-        if(tmpV.y<dataBoundsLeftLon)
+        if (tmpC.lon>dataBoundsRightLon)
         {
-          dataBoundsLeftLon=tmpV.x;
+          dataBoundsRightLon=tmpC.lon;
         }
-        backgroundPoints.add(tmpV);
+        if (tmpC.lon<dataBoundsLeftLon)
+        {
+          dataBoundsLeftLon=tmpC.lon;
+        }
+        userBackgroundPoints.add(new PVector(tmpC.lat, tmpC.lon));
       }
     }
     println("("+dataBoundsTopLat+","+dataBoundsRightLon+","+dataBoundsBottomLat+","+dataBoundsLeftLon+")");
+    map =new MercatorMap(MAP_WIDTH, MAP_HEIGHT, dataBoundsTopLat, dataBoundsBottomLat, dataBoundsLeftLon, dataBoundsRightLon );
     return true;
   }
 }
@@ -89,7 +119,7 @@ boolean loadKeyPointsInCurrentSession()
   try {
     String url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
     url+="?get_user="+GLOBAL_NAME;
-    url+="&session="+ABSOLUTE_NUMBER;
+    url+="&session="+ABSOLUTE_ID;
     s=loadStrings(url);
   }
   catch(Exception e) {
@@ -100,7 +130,7 @@ boolean loadKeyPointsInCurrentSession()
     {
       try {
         String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();  
-        File file = new File(SDCARD + File.separator +ABSOLUTE_NUMBER +"_log.txt"); 
+        File file = new File(SDCARD + File.separator +ABSOLUTE_ID+"_log.txt"); 
         s = loadStrings(file.getPath());
       }
       catch(Exception e)

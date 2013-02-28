@@ -2,6 +2,10 @@
 /*******************************************
  SAVE LOCATION DATA
  ********************************************/
+/*
+@param boolean whole: if true: save all the data in memory if true, overwriting all the old file, else just save the current location
+@param boolean user: if true: set flag user to true, else auto is set.
+*/ 
 void saveLocationData(boolean whole, boolean user)
 {
   String[] s;
@@ -14,7 +18,7 @@ void saveLocationData(boolean whole, boolean user)
       s[i] = dataStore.get(i).x+","+dataStore.get(i).y;
       i++;
     }
-    saveStrings(SDCARD + File.separator + "gps_track_"+ABSOLUTE_NUMBER+".txt", s);
+    saveStrings(SDCARD + File.separator + "gps_track_"+ABSOLUTE_ID+".txt", s);
     return;
   }
   else
@@ -32,7 +36,7 @@ void saveLocationData(boolean whole, boolean user)
     VERSION_COUNTER++;
 
     
-    saveStringToFile(SDCARD + File.separator + "gps_track_"+ABSOLUTE_NUMBER+".txt", s1);
+    saveStringToFile(SDCARD + File.separator + "gps_track_"+ABSOLUTE_ID+".txt", s1);
     
      /***********
      save data for background
@@ -73,7 +77,7 @@ void saveLocationData(boolean whole, boolean user)
     
     url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
     url+="?save_user="+GLOBAL_NAME;
-    url+="&session="+ABSOLUTE_NUMBER;
+    url+="&session="+ABSOLUTE_ID;
     url+="&version="+VERSION_COUNTER;
     tmpAsd = bufferWeb+"\n"+s1;
 
@@ -111,7 +115,7 @@ void logMessage(String s)
   s=dateTmp+" :: "+s;
   String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
 
-  saveStringToFile(SDCARD + File.separator +ABSOLUTE_NUMBER +"_log.txt", s);
+  saveStringToFile(SDCARD + File.separator +ABSOLUTE_ID +"_log.txt", s);
 }
 void logMessage(String[] s)
 {
@@ -119,7 +123,7 @@ void logMessage(String[] s)
   String s1=s.toString();
   s1=dateTmp+" :: "+s1;
   String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
-  saveStringToFile(SDCARD + File.separator +ABSOLUTE_NUMBER +"_log.txt", s1);
+  saveStringToFile(SDCARD + File.separator +ABSOLUTE_ID +"_log.txt", s1);
 }
 boolean checkInternetConnection()
 {
@@ -142,24 +146,7 @@ boolean checkInternetConnection()
     return false;
   }
 }
-void newSession()
-{
-  Date d = new Date();
-  long timestamp = d.getTime() + (86400000 ); 
-  String date = new java.text.SimpleDateFormat("yyyyMMdd").format(timestamp); 
-  NUMBER_OF_SESSIONS+=1;
-  ABSOLUTE_NUMBER=int(date+""+NUMBER_OF_SESSIONS);
-}
 
-
-public boolean surfaceTouchEvent(MotionEvent event) {
-
-  //call to keep mouseX, mouseY, etc updated
-  super.surfaceTouchEvent(event);
-
-  //forward event to class for processing
-  return gesture.surfaceTouchEvent(event);
-}
 
 
 
@@ -183,9 +170,9 @@ boolean makeHTTPGET(String URL)
   }
   catch(Exception e)
   {
-    println("MAKE_HTTP_GET:"+e);
+    println("MAKE_HTTP_GET:"+e+" \n "+URL);
     text(e.toString(), 10, displayHeight-30);
-    logMessage(e.toString());
+    logMessage(e.toString()+" \n "+URL);
     return false;
   }
 }

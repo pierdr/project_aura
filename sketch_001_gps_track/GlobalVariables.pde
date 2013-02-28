@@ -4,7 +4,7 @@ SESSION DATA
 **/
 public int     VERSION_COUNTER         =  0;
 public int     NUMBER_OF_SESSIONS      =  0;
-public int     ABSOLUTE_NUMBER         =  -1;
+public String  ABSOLUTE_ID             =  "-1";
 public String  GLOBAL_NAME             =  "";
 public String  bufferWeb               =  "";
 public String  bufferWebGlobal         =  "";
@@ -14,7 +14,8 @@ DATA STRUCTURE VAR
 ***/
 ArrayList<PVector> keyPoints;
 ArrayList<PVector> pointsInSession;
-ArrayList<PVector> backgroundPoints;
+ArrayList<PVector> userBackgroundPoints;
+ArrayList<Path>    backgroundPaths;
 
 
 
@@ -94,15 +95,24 @@ float dataBoundsBottomLat=0;
 /********
 UI
 *********/
-SButton sbT;
+SButton buttonNewSession;
+SButton buttonPin;
+SButton buttonTakePhoto;
+SButton buttonRedraw;
 
 
 void init()
 {
   keyPoints=new ArrayList<PVector>();
   pointsInSession=new ArrayList<PVector>();
-  backgroundPoints=new ArrayList<PVector>();
-  sbT=new SButton(displayWidth-100,displayHeight-50,100,50,color(240,210,245),"reset");
+  userBackgroundPoints=new ArrayList<PVector>();
+  backgroundPaths=new ArrayList<Path>();
+  
+  buttonNewSession=new SButton(displayWidth-200,displayHeight-50,250,100,color(240,210,245),"new session");
+  buttonPin=new SButton(displayWidth-200,(displayHeight/3)*2-50,200,100,color(240,210,245),"pin");
+  buttonTakePhoto=new SButton(displayWidth-200,displayHeight/3-50,200,100,color(240,210,245),"take photo");
+  buttonRedraw=new SButton(0,displayHeight-100,200,100,color(0,255,255),"redraw");
+  
   logMessage("message");
 }
 

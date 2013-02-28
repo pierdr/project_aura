@@ -2,16 +2,18 @@
 void drawBackground() {
   stroke(0);
   strokeWeight(1);
-  println("background:"+backgroundPoints.size());
-  for (int i=0;i<backgroundPoints.size();i++)
+  for (int i=0;i<userBackgroundPoints.size();i++)
   {
-    PVector tmpM=backgroundPoints.get(i);
+    PVector tmpM=userBackgroundPoints.get(i);
     PVector tmpP=map.getScreenLocation(tmpM);
-
+    
     point(tmpP.x, tmpP.y);
-    if (i<backgroundPoints.size()-1)
+    if (i<userBackgroundPoints.size()-1)
     {
-      // line(tmpP.x, tmpP.y, backgroundPoints.get(i+1).x, backgroundPoints.get(i+1).y);
+      strokeWeight(0.5);
+      PVector tmpPP=userBackgroundPoints.get(i+1);
+      tmpPP=map.getScreenLocation(tmpPP);
+      line(tmpP.x, tmpP.y, tmpPP.x,tmpPP.y);
     }
   }
 }
@@ -23,10 +25,16 @@ void debugDraw()
   text("Distance:"+dist +"\n"+
     "Velocity:"+ vel+
     "\nTotal Distance:"+dist_total+"\n Size:"+places.size()+"\nGlobal_counter:"+VERSION_COUNTER+"\nName: "
-    +GLOBAL_NAME+"\nAbsolute_number:"+ABSOLUTE_NUMBER, 100, 100);
+    +GLOBAL_NAME+"\nAbsolute_number:"+ABSOLUTE_ID+"\nNumber_sessions:"+NUMBER_OF_SESSIONS, 100, 100);
 }
 
 void UIDraw()
 {
-  
+  buttonNewSession.paint();
+  buttonTakePhoto.paint();
+  buttonPin.paint();
+  buttonRedraw.paint();
 }
+
+
+
