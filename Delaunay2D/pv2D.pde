@@ -1,7 +1,10 @@
 //************************************************************************
 //**** 2D POINTS AND VECTOR CLASSES, Jarek Rossignac, Oct 2005
 //************************************************************************
-class pt { float x,y; 
+class pt { 
+  
+  float x,y; 
+  color c;
 
   // CREATE, COPY
   pt (float px, float py) {x = px; y = py;};
@@ -9,6 +12,8 @@ class pt { float x,y;
   void setFromValues(float px, float py) {x = px; y = py;}; 
   void setFromPt(pt P) { x = P.x; y = P.y; }; 
   void setFromMouse() { x = mouseX; y = mouseY; }; 
+  
+  void setColor(color newcolor) {c = newcolor;}
 
   // DISPLAY, PRINT 
   void vert() {vertex(x,y);};

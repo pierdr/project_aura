@@ -3,80 +3,77 @@
 //import java.io.File;
 
 
-//*****************************************************************************
-// Delaunay Triangulaiotn, Jarek Rossignac, March 2006
-//*****************************************************************************
+///////////////////////////////////////////////////////////////////////////
 
-int vn =5; // number of points (sites)
-int cap=1000;                    // max number of points
+int vn =5;                       // number of points (sites)
+int cap=100;                    // max number of points
 pt[] P = new pt [cap];          // Array containing the points
 int bi=-1;                      // index of selected mouse-vertex, -1 if none selected
 pt Mouse = new pt(0, 0);         // current mouse position
 color black = color(0, 10, 10); 
-color blue = color(10, 10, 200);
-boolean redraw=true;
-color grey = color(0, 5, 0); 
+color blue = color(10, 10, 200); 
+color grey = color(0, 5, 0);
+boolean redraw;
 boolean dots = false;           // toggles display circle centers
 boolean numbers = false;         // toggles display of vertex numbers 
 
 void setup() {   
-  size(displayWidth, displayHeight);  
+  size(700, 700);  
   strokeJoin(ROUND); 
   strokeCap(ROUND);
-  //  PFont font = loadFont("Courier-14.vlw"); textFont(font, 12);
+  setuppixelImage();
+  
   for (int i=0; i<cap; i++) {
     P[i]=new pt(0, 0);
   };      // creates all points
+  
   for (int i=0; i<vn; i++) {
     P[i]=new pt(random(width), random(height));
   };  // makes the first vn poits random
+  
   noFill();
 } 
 
 
-//*********************************************
-// **** REFRESH DISPLAY
-//*********************************************
+///////////////////////////////////////////////////////////////////////////
+
 
 void draw() { 
-  if (redraw)
-  {
-    background(255); 
-    if (bi!= -1) {
-      P[bi].setFromMouse();
-    };                    // snap selected vertex to mouse position during dragging
-    drawTriangles();
-    //drawPoints();
-    redraw=false;
+  if (redraw) {   
+  background(255); 
+  if (bi!= -1) {
+    P[bi].setFromMouse();
+  };                    // snap selected vertex to mouse position during dragging
+  drawTriangles();
+//  drawPoints();
+  redraw = false;
   }
 };
 
-void drawPoints() {              // draws the vn sites and numbers them 
-  if (numbers) {
-    fill(10, 10, 100); 
-    for (int i=0; i<vn; i++) {
-      vec V = new vec(5, 5); 
-      P[i].label(str(i), V );
-    }; 
-    noFill();
-  };
-  for (int i=0; i<vn; i++) {
-    P[i].show(5);
-  };
-}; 
+//void drawPoints() {              // draws the vn sites and numbers them 
+//  if (numbers) {
+//    fill(10, 10, 100); 
+//    for (int i=0; i<vn; i++) 
+//    {
+//      vec V = new vec(5, 5); 
+//      P[i].label(str(i), V );
+//    }; 
+//
+//    noFill();
+//  };
+//  for (int i=0; i<vn; i++) {
+//    P[i].show(5);
+//  };
+//}; 
 
-//*********************************************
-// **** COMPUTES AND DRAWS DELAUNAY TRIANGLES
-//*********************************************
+///////////////////////////////////////////////////////////////////////////
 
 void drawTriangles() { 
   pt X = new pt(0, 0);
   float r=1;
-
+  
   for (int i=0; i<vn-2; i++) {
-    
     for (int j=i+1; j<vn-1; j++) {
-      color c=color(random(120, 200), random(120, 200), random(120, 200));
       for (int k=j+1; k<vn; k++) {
         boolean found=false; 
         for (int m=0; m<vn; m++) {
@@ -87,31 +84,38 @@ void drawTriangles() {
           }
         };
         if (!found) {
-          strokeWeight(0.2); 
-          stroke(grey); 
-          //ellipse(X.x, X.y, r, r); 
+          //         strokeWeight(0.2); stroke(grey); 
+          //         ellipse(X.x,X.y,r,r); 
 
-          if (dots) {
-            stroke(blue); 
-            X.show(2);
-          };
-          strokeWeight(0.8); 
-          stroke(black); 
-          fill(c);
+          //         if (dots) {
+          //         stroke(blue); X.show(2); 
+          //         };
+//          strokeWeight(0.5); 
+//          stroke(black); 
+          noStroke();
+          //color c = (int) random(50,100);
+          //color c = findColor((int) random(0,myImage.width),(int) random(0,myImage.height),myImage.width/imageScale,myImage.height/imageScale);
+          
+//          color c = pixel_color(myImage);
+  
+          color a = lerpColor(P[i].c, P[j].c, 0.5);
+          color f = lerpColor(a, P[k].c, 0.5);        
+          fill(f);
+          
           beginShape(POLYGON);  
           P[i].vert(); 
           P[j].vert(); 
           P[k].vert(); 
-          endShape(CLOSE);
+          endShape();
         };
       };
     };
   }; // end triple loop
 };    
 
-//*********************************************
-// **** COMPUTE CIRCUMCENTER
-//*********************************************
+///////////////////////////////////////////////////////////////////////////
+
+
 pt centerCC (pt A, pt B, pt C) {    // computes the center of a circumscirbing circle to triangle (A,B,C)
   vec AB =  A.vecTo(B);  
   float ab2 = dot(AB, AB);
@@ -130,10 +134,12 @@ pt centerCC (pt A, pt B, pt C) {    // computes the center of a circumscirbing c
   return(X);
 };
 
-//**************************************
-// **** GUI FOR EDITING THE POINTS
-//**************************************
-void mousePressed() {                                                   // to do when mouse is pressed  
+
+///////////////////////////////////////////////////////////////////////////
+
+
+void mousePressed() {  // to do when mouse is pressed  
+  redraw = true;
   float bd=sq(width/5);                                                       // init square of smallest distance to selected point
   Mouse.setFromMouse();                                                 // save current mouse location
   for (int i=0; i<vn; i++) { 
@@ -145,9 +151,14 @@ void mousePressed() {                                                   // to do
   if (bd>10) { 
     bi=vn++;  
     P[bi].setFromMouse();                          // if closest vertex is too far
+    P[bi].setColor(pixel_color(myImage));
   };
-  redraw=true;
+  
+ int scaledMouseX = mouseX / imageScale;
+  int scaledMouseY = mouseY / imageScale;
+ 
 }
+
 
 float d2(int j) {
   return (Mouse.disTo(P[j]));
@@ -164,9 +175,9 @@ void mouseReleased() {                                      // do this when mous
   bi= -1;
 };
 
-//**********************************
-//***      CONTROL WITH KEYS
-//**********************************
+///////////////////////////////////////////////////////////////////////////
+
+
 void keyPressed() {  
   if (key=='d') {
     dots=!dots;
@@ -253,6 +264,7 @@ void loadPts() {
  return (r);
  };
  */
+
 
 
 
