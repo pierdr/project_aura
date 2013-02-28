@@ -6,6 +6,10 @@ void newSession()
   NUMBER_OF_SESSIONS+=1;
   ABSOLUTE_ID=(date+""+NUMBER_OF_SESSIONS);
   updateConfigFile();
+  keyPoints.clear();
+  pointsInSession.clear();
+  //keyPoints=new ArrayList<PVector>();
+  //pointsInSession=new ArrayList<PVector>();
 }
 
 

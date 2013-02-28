@@ -4,8 +4,8 @@
  ********************************************/
 /*
 @param boolean whole: if true: save all the data in memory if true, overwriting all the old file, else just save the current location
-@param boolean user: if true: set flag user to true, else auto is set.
-*/ 
+ @param boolean user: if true: set flag user to true, else auto is set.
+ */
 void saveLocationData(boolean whole, boolean user)
 {
   String[] s;
@@ -35,21 +35,21 @@ void saveLocationData(boolean whole, boolean user)
     }
     VERSION_COUNTER++;
 
-    
+
     saveStringToFile(SDCARD + File.separator + "gps_track_"+ABSOLUTE_ID+".txt", s1);
-    
-     /***********
+
+    /***********
      save data for background
      *****************/
-     
+
     String sG=me.x+","+me.y;
     saveStringToFile(SDCARD + File.separator + "global_point_"+GLOBAL_NAME+".txt", sG);
-    
-    
+
+
     String url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
     url+="?user="+GLOBAL_NAME;
     url+="&save_point=";
-    
+
     String tmpAsd = "\n"+s1;
 
     try
@@ -70,11 +70,11 @@ void saveLocationData(boolean whole, boolean user)
       bufferWebGlobal+="\n"+sG;
     }
     //end save data for background
-    
+
     /************************
-    SAVE DATA 
-    *************************/
-    
+     SAVE DATA 
+     *************************/
+
     url= "http://www.pierdr.com/ciid/06_GD/AURA.php";
     url+="?save_user="+GLOBAL_NAME;
     url+="&session="+ABSOLUTE_ID;
@@ -98,8 +98,6 @@ void saveLocationData(boolean whole, boolean user)
     {
       bufferWeb+="\n"+s1;
     }
-    
-    
   }
 }
 //end save location data
@@ -160,12 +158,22 @@ boolean saveStringOnTheWeb(String URL, String newData)
 boolean makeHTTPGET(String URL)
 {
   try {
-
-    String []c=loadStrings(URL);
     //println("success");
     //println(c);
-    logMessage("success:\n"+c.toString());
-    text(c.toString(), 10, displayHeight-30);
+    final String URLTmp=URL;
+    new Thread(new Runnable() {
+      public void run() {
+        try{
+        String []c=loadStrings(URLTmp);
+          logMessage("success:\n"+c.toString());
+        }
+        catch(Exception e)
+        {
+          logMessage("not reacheable:\n"+e);
+        }
+      }
+    }
+    ).start();
     return true;
   }
   catch(Exception e)
@@ -196,8 +204,6 @@ boolean saveStringToFile(String outFileName, String newData)
   }
   finally
   {
-
   }
 }
-
 

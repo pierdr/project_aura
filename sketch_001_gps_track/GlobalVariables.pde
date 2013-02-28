@@ -72,6 +72,7 @@ import android.content.Context;
 
 
 
+
 /******
 MAP BOUNDS
  size(1280,800);
@@ -108,9 +109,9 @@ void init()
   userBackgroundPoints=new ArrayList<PVector>();
   backgroundPaths=new ArrayList<Path>();
   
-  buttonNewSession=new SButton(displayWidth-200,displayHeight-50,250,100,color(240,210,245),"new session");
-  buttonPin=new SButton(displayWidth-200,(displayHeight/3)*2-50,200,100,color(240,210,245),"pin");
-  buttonTakePhoto=new SButton(displayWidth-200,displayHeight/3-50,200,100,color(240,210,245),"take photo");
+  buttonNewSession=new SButton(displayWidth-200,(displayHeight/2)-320,250,100,color(240,210,245),"new session");
+  buttonPin=new SButton(displayWidth-200,(displayHeight/2)-210,200,100,color(240,210,245),"pin");
+  buttonTakePhoto=new SButton(displayWidth-200,displayHeight/2-100,200,100,color(240,210,245),"take photo");
   buttonRedraw=new SButton(0,displayHeight-100,200,100,color(0,255,255),"redraw");
   
   logMessage("message");

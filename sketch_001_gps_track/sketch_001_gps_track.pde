@@ -5,13 +5,13 @@ void setup()
   size(displayWidth, displayHeight);
   frameRate(1);
   loadConfigFile();
-  
+
   //set number of sessions
   if (NUMBER_OF_SESSIONS<10 || NUMBER_OF_SESSIONS>99)
   {
     NUMBER_OF_SESSIONS=10;
   }
-  
+
   //set absolute number
   if (int(ABSOLUTE_ID)==0 || int(ABSOLUTE_ID)==-1)
   {
@@ -27,13 +27,12 @@ void setup()
   loadLocationData();
   try {
     //float mapScreenWidth, float mapScreenHeight, float topLatitude, float bottomLatitude, float leftLongitude, float rightLongitude) {
-   // map =new MercatorMap(MAP_WIDTH, MAP_HEIGHT, TOP_LAT, BOTTOM_LAT, LEFT_LON, RIGHT_LON );
+    // map =new MercatorMap(MAP_WIDTH, MAP_HEIGHT, TOP_LAT, BOTTOM_LAT, LEFT_LON, RIGHT_LON );
     //map_background=loadImage("project_aura.png");
     me_pixel=new PVector(0, 0);
     me=new PVector(0, 0); 
     gesture = new KetaiGesture(this);
     location=new KetaiLocation(this);
-    
   }
   catch(Exception e)
   {
@@ -67,47 +66,52 @@ void draw()
   if (redraw)
   {
     background(255);
-    
-    drawBackground();
-    debugDraw();
-    drawShape();
-    UIDraw();
-    redraw=true;
+   
+      drawBackground();
+      debugDraw();
+      drawShape();
+      UIDraw();
+      redraw=true;
+   
+   
   }
-  
 }
 
 void onLocationEvent(double _latitude, double _longitude, double _altitude)
 {
-  
+
   try {
-    me.x=(float)_latitude;
-    me.y=(float)_longitude;
-    me_pixel = map.getScreenLocation(me);
-    if (places==null)
+    if (map!=null)
     {
-      places=new ArrayList<PVector>();
-      dataStore=new ArrayList<PVector>();
-    }
-    dataStore.add(me.get());
-    places.add(me_pixel);
-    if (me_last!=null)
-    {
-      dist        = distance_world_mercator(me_last, me);
-      dist_total  +=dist;
+      me.x=(float)_latitude;
+      me.y=(float)_longitude;
 
-      float dt=(float)(millis()-tick);
-      vel=dist/dt;
-    }
+      me_pixel = map.getScreenLocation(me);
+      if (places==null)
+      {
+        places=new ArrayList<PVector>();
+        dataStore=new ArrayList<PVector>();
+      }
+      dataStore.add(me.get());
+      places.add(me_pixel);
+      if (me_last!=null)
+      {
+        dist        = distance_world_mercator(me_last, me);
+        dist_total  +=dist;
 
-    me_last=new PVector(me.x, me.y);
-    saveLocationData(false, false);
+        float dt=(float)(millis()-tick);
+        vel=dist/dt;
+      }
+
+      me_last=new PVector(me.x, me.y);
+      saveLocationData(false, false);
+    }
   }
   catch(Exception e)
   {
     println("ON_LOCATION:"+e);
   }
-  
+
   redraw=true;
 }
 
