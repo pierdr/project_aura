@@ -48,9 +48,9 @@ void loadConfigFile()
         {
 
           NUMBER_OF_SESSIONS=infos[i].getInt("value");
-          if (NUMBER_OF_SESSIONS<100)
+          if (NUMBER_OF_SESSIONS<10)
           {
-            NUMBER_OF_SESSIONS=100;
+            NUMBER_OF_SESSIONS=10;
           }
           //println(NUMBER_OF_SESSIONS);
         }

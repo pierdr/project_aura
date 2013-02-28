@@ -50,17 +50,17 @@ void saveLocationData(boolean whole, boolean user)
     url+="?user="+GLOBAL_NAME;
     url+="&save_point=";
     
-    String tmpAsd = bufferWebGlobal+"\n"+s1;
+    String tmpAsd = "\n"+s1;
 
     try
     {
-      bufferWebGlobal=URLEncoder.encode(tmpAsd, "utf-8");
+      tmpAsd=URLEncoder.encode(tmpAsd, "utf-8");
     }
     catch(Exception e)
     {
       println("SAVE_LOCATION_GLOBAL_URL_ENCODER:"+e);
     }
-    url+=bufferWebGlobal;
+    url+=bufferWebGlobal+tmpAsd;
     if (makeHTTPGET(url))
     {
       bufferWeb="";

@@ -70,6 +70,7 @@ void draw()
     
     drawBackground();
     debugDraw();
+    drawShape();
     UIDraw();
     redraw=true;
   }

@@ -17,6 +17,19 @@ void drawBackground() {
     }
   }
 }
+void drawShape()
+{
+  fill(0,255,0);
+  beginShape();
+  println("DRAW SJHAPE"+keyPoints.size());
+  for(int i=0;i<keyPoints.size();i++)
+  {
+     PVector tmpPP=keyPoints.get(i);
+     tmpPP=map.getScreenLocation(tmpPP);
+    vertex(tmpPP.x, tmpPP.y);
+  }  
+  endShape(CLOSE);
+}
 
 void debugDraw()
 {
