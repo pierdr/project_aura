@@ -1,6 +1,7 @@
+import processing.pdf.*;
 import megamu.mesh.*;
 
-
+ArrayList <Triangle> triangles;
 ArrayList<pt> points;
 
 int vn =5;                       // number of points (sites)
@@ -13,14 +14,17 @@ boolean dots = false;            // toggles display circle centers
 boolean numbers = false;         // toggles display of vertex numbers
 int index=0;
 Delaunay myDelaunay;
-float[][] points_matrix;
+Delaunay my_delaunay_prime;
+float [][] points_matrix;
+float [][] points_matrix_prime;
+MPolygon[] myRegions;
+color [] fillColors;
 
 void setup()
 {
+  size (800, 800);
   points=new ArrayList<pt>();
   String [] s=loadStrings("points_cph.csv");
-  //String [] s=loadStrings("http://www.pierdr.com/ciid/06_GD/AURA.php?get_user=pierdr");
-  //s=concat(s,loadStrings("points_cph.csv"));
   float boundsTopLat=0, boundsRightLon=0, boundsBottomLat=0, boundsLeftLon=0;
   for (int i=0;i<s.length;i++) {
 
@@ -52,9 +56,28 @@ void setup()
       }
     }
   }
+
   println(boundsTopLat+" "+boundsRightLon+" "+boundsBottomLat+" "+boundsLeftLon);
   map =new MercatorMap(displayWidth-200, displayHeight-200, boundsTopLat, boundsBottomLat, boundsLeftLon, boundsRightLon );
-  points_matrix = new float[s.length][2];
+  float[][] points_matrix = new float[s.length][2];
+
+  println("size");
+  int sizePrime = (int)random(25, 50);
+  int previous=0;
+  int[] primeIndexes = new int[sizePrime];
+  for (int i=0; i < sizePrime; i++) {
+    int tmpI=0;
+    if (!(i==0 || i==(sizePrime-1)))
+    {
+      tmpI = (int) (floor((s.length/sizePrime)*i) + (random (-s.length/sizePrime/2, +s.length/sizePrime/2)));
+    }
+    println(tmpI);
+    previous=tmpI;
+    primeIndexes[i] = tmpI;
+  }
+  println("indexes");
+  int f=0;
+  points_matrix_prime=new float[sizePrime][2];
   for (int i=0;i<s.length;i++) {
 
     String[] sTmp=split(s[i], ",");
@@ -63,13 +86,30 @@ void setup()
 
       PVector pTmp=map.getScreenLocation(new PVector(float(sTmp[0]), float(sTmp[1])));
       points.add(new pt(pTmp.x, pTmp.y));
+      //      voronoi.addPoint(new Vec2D(pTmp.x, pTmp.y));
+
       points_matrix[i][0] = pTmp.x+100;
       points_matrix[i][1] = pTmp.y+100;
-      println(points_matrix[i]);
+
+      for (int k=0; k < sizePrime; k++) {
+        if (i == primeIndexes[k]) {
+          if (pTmp.x<10 || pTmp.y<10)
+          {
+          }
+          else
+          {
+            points_matrix_prime[f][0] = pTmp.x+100;
+            points_matrix_prime[f][1] = pTmp.y+100;
+            println(points_matrix_prime[f]);
+            f++;
+          }
+          break;
+        }
+      }
+
+      //println(points_matrix[i]);
     }
   }
-
-
 
   myDelaunay = new Delaunay( points_matrix );
 
@@ -90,7 +130,106 @@ void setup()
 
   //noFill();
   redraw=true;
+
+  my_delaunay_prime=new Delaunay(points_matrix_prime);
+
+  println(points.size());
+  size(displayWidth, displayHeight);  
+  strokeJoin(ROUND); 
+  strokeCap(ROUND);
+  setuppixelImage();
+  P=new pt[points.size()];
+  cap=points.size();
+  for (int i=0; i<cap; i++) {
+    P[i]=new pt(0, 0);
+  };      // creates all points
+
+  for (int i=0; i<vn; i++) {
+    P[i]=new pt(random(width), random(height));
+  };  // makes the first vn poits random*/
+
+
+
+  triangles = new ArrayList <Triangle>();
+
+  ArrayList <Edge> edgesMain = new ArrayList<Edge>();
+  ArrayList <Edge> edgesSub  = new ArrayList<Edge>();
+  float[][] my_edges_prime = my_delaunay_prime.getEdges();
+
+  for (int i=0; i < my_edges_prime.length; i++) {
+    edgesMain.add(new Edge(my_edges_prime[i][0], my_edges_prime[i][1], my_edges_prime[i][2], my_edges_prime[i][3]));
+    //edgesSub.add(new Edge(my_edges_prime[i][0], my_edges_prime[i][1], my_edges_prime[i][2], my_edges_prime[i][3]));
+  }
+
+
+  Edge secondEdge=new Edge(0, 0, 0, 0);
+  int secondEdgeIndex=-1;
+  int firstEdgeIndex=edgesMain.size()-1;
+  int thirdEdgeIndex=-1;
+  Triangle tmpTr=new Triangle(edgesMain.get(edgesMain.size()-1));
+  fillColors=new color[my_edges_prime.length];
+  int colorIndex=0;
+
+  while (edgesMain.size ()> 0) {
+
+    if (tmpTr==null || tmpTr.isComplete()) {
+      // remove edges from edgesMain
+      if (tmpTr!=null)
+      {
+        if (!tmpTr.hasVoid())
+        {
+          triangles.add(tmpTr);
+        }
+          edgesMain.remove(tmpTr.a);
+          edgesMain.remove(tmpTr.b);
+          edgesMain.remove(tmpTr.c);
+        
+      }
+
+
+      int lastElemIndex=edgesMain.size()-1;
+
+      if (lastElemIndex<=0)
+      {  
+        break;
+      }
+      println(triangles.size());
+      fillColors[colorIndex]=color(random(1, 240), random(1, 240), random(1, 240));
+      colorIndex++;
+      tmpTr = new Triangle(edgesMain.get(lastElemIndex));
+      firstEdgeIndex=edgesMain.size()-1;
+    }
+    for (int i=0;i<my_edges_prime.length;i++) {
+      Edge tmp1=new Edge(my_edges_prime[i][0], my_edges_prime[i][1], my_edges_prime[i][2], my_edges_prime[i][3]);
+      if (tmpTr.a.hasOnePointInCommon(tmp1))
+      {
+        if (secondEdgeIndex!=i)
+        {
+          secondEdgeIndex=i;
+          secondEdge=tmp1;
+          continue;
+        }
+      }
+    }
+    for (int i=0;i<my_edges_prime.length;i++) {
+      Edge tmp2=new Edge(my_edges_prime[i][0], my_edges_prime[i][1], my_edges_prime[i][2], my_edges_prime[i][3]);
+      if (secondEdge.hasOnePointInCommon(tmp2) && secondEdgeIndex!=i)
+      {
+        if (tmpTr.a.hasOnePointInCommon(tmp2))
+        {
+          thirdEdgeIndex=i;
+          tmpTr.setEdges(secondEdge, tmp2);
+          break;
+        }
+      }
+    }
+  }
+  println("tris size:"+triangles.size());
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 
 void draw()
 {
@@ -101,7 +240,8 @@ void draw()
     if (bi!= -1) {
       P[bi].setFromDataSet();
     };                    // snap selected vertex to mouse position during dragging
-    //drawTriangles();
+
+    //    drawTriangles();
     beginShape();
     for (int i=0;i<points.size();i++)
     {
@@ -128,33 +268,62 @@ void draw()
     {
       fill(100, 50);
       stroke(100, 50);
+      strokeWeight(1);
+
       float startX = myEdges[i][0];
       float startY = myEdges[i][1];
       float endX = myEdges[i][2];
       float endY = myEdges[i][3];
       line( startX, startY, endX, endY );
     }
-    int[][] myLinks = myDelaunay.getLinks();
-    try{
-    for (int i=0; i<myLinks.length; i++)
-    {
-      int startIndex = myLinks[i][0];
-      int endIndex = myLinks[i][1];
+    /*
+    float[][] my_edges_prime = my_delaunay_prime.getEdges();
+     
+     for (int i=0; i<my_edges_prime.length; i++)
+     {
+     noFill();
+     stroke(0);
+     strokeWeight(1);
+     float startX = my_edges_prime[i][0];
+     float startY = my_edges_prime[i][1];
+     float endX = my_edges_prime[i][2];
+     float endY = my_edges_prime[i][3];
+     if ((startX+startY<10) || (endX+endY)<10 )
+     {
+     continue;
+     }
+     line( startX, startY, endX, endY );
+     }*/
 
-      float startX = points_matrix[startIndex][0];
-      float startY = points_matrix[startIndex][1];
-      float endX = points_matrix[endIndex][2];
-      float endY = points_matrix[endIndex][3];
-      line( startX, startY, endX, endY );
-    }
-    }
-    catch(Exception e)
+    for (int i=0;i<triangles.size();i++)
     {
-      println(e);
+      fill(fillColors[i]);
+      println(red(fillColors[i])+" "+green(fillColors[i])+" "+blue(fillColors[i]));
+      triangles.get(i).paintColor();
     }
-
+    /* for (int i=0; i<myRegions.length; i++)
+     {
+     // an array of points
+     float[][] regionCoordinates = myRegions[i].getCoords();
+     boolean draw = true;
+     
+     for (int j=0; j < myRegions[i].count(); j++) {
+     if (regionCoordinates[j][0]<0 || regionCoordinates[j][0] > width || regionCoordinates[j][1] < 0 || regionCoordinates[j][1] > height) {
+     draw = false;
+     }
+     }      
+     fill(255, 0, 0);
+     if (draw) {
+     myRegions[i].draw(this); // draw this shape
+     }
+     }*/
     //  drawPoints();
     redraw = false;
+
+    //    fill(0);
+    //    for (Triangle2D t : voronoi.getTriangles()) {
+    //    triangle(t.a.x, t.a.y, t.b.x, t.b.y, t.c.x, t.c.y);
+    //  }
   }
 }
 
@@ -214,7 +383,7 @@ pt centerCC (pt A, pt B, pt C) {    // computes the center of a circumscirbing c
 };
 
 
-///////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 
 void mousePressed() {  // to do when mouse is pressed  
@@ -233,8 +402,6 @@ void mousePressed() {  // to do when mouse is pressed
     P[bi].setColor(pixel_color(myImage));
   };
   index++;
-  //int scaledMouseX = mouseX / imageScale;
-  //int scaledMouseY = mouseY / imageScale;
 }
 
 
@@ -270,7 +437,7 @@ void keyPressed() {
     loadPts();
   };
   if (key=='i') { 
-    saveFrame("pix-####.tif");
+    saveFrame("pix-####.pdf");
   };   
   if (key=='f') { 
     float sx=width; 
