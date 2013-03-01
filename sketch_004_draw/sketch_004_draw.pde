@@ -19,6 +19,7 @@ float [][] points_matrix;
 float [][] points_matrix_prime;
 MPolygon[] myRegions;
 color [] fillColors;
+int maxArea=0;
 
 void setup()
 {
@@ -154,7 +155,7 @@ void setup()
 
   ArrayList <Edge> edgesMain = new ArrayList<Edge>();
   ArrayList <Edge> edgesSub  = new ArrayList<Edge>();
-  float[][] my_edges_prime = my_delaunay_prime.getEdges();
+  float[][] my_edges_prime = myDelaunay.getEdges();
 
   for (int i=0; i < my_edges_prime.length; i++) {
     edgesMain.add(new Edge(my_edges_prime[i][0], my_edges_prime[i][1], my_edges_prime[i][2], my_edges_prime[i][3]));
@@ -179,14 +180,12 @@ void setup()
         if (!tmpTr.hasVoid())
         {
           triangles.add(tmpTr);
+          
         }
           edgesMain.remove(tmpTr.a);
           edgesMain.remove(tmpTr.b);
-          edgesMain.remove(tmpTr.c);
-        
+          edgesMain.remove(tmpTr.c); 
       }
-
-
       int lastElemIndex=edgesMain.size()-1;
 
       if (lastElemIndex<=0)
@@ -218,7 +217,11 @@ void setup()
         if (tmpTr.a.hasOnePointInCommon(tmp2))
         {
           thirdEdgeIndex=i;
-          tmpTr.setEdges(secondEdge, tmp2);
+          int tmpArea=tmpTr.setEdges(secondEdge, tmp2);
+          if(tmpArea>maxArea)
+          {
+            maxArea=tmpArea;
+          }
           break;
         }
       }
@@ -293,13 +296,12 @@ void draw()
      continue;
      }
      line( startX, startY, endX, endY );
-     }*/
-
+     }
+      */
     for (int i=0;i<triangles.size();i++)
     {
-      fill(fillColors[i]);
-      println(red(fillColors[i])+" "+green(fillColors[i])+" "+blue(fillColors[i]));
-      triangles.get(i).paintColor();
+      //fill(fillColors[i]);
+      triangles.get(i).paintColor(fillColors[i]);
     }
     /* for (int i=0; i<myRegions.length; i++)
      {

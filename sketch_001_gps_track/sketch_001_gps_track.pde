@@ -61,11 +61,11 @@ void draw()
   if (redraw)
   {
       background(255);
-      image(map_background,0,0);
-      drawBackground();
-      debugDraw();
-      drawShape();
-      UIDraw();
+      //image(map_background,0,0);
+      //drawBackground();
+      //debugDraw();
+      //drawShape();
+      //UIDraw();
       redraw=true;
   }
 }
