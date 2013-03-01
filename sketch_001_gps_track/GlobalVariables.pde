@@ -82,7 +82,7 @@ import android.os.Environment;
 import java.io.File;
 import android.net.ConnectivityManager;
 import android.content.Context;
-import java.awt.Point;
+
 
 
 
@@ -114,6 +114,7 @@ SButton buttonNewSession;
 SButton buttonPin;
 SButton buttonTakePhoto;
 SButton buttonRedraw;
+TriangleButton theButton;
 
 
 void init()
@@ -126,10 +127,13 @@ void init()
   background = loadImage("arizona_350x500.jpg");
   allColors = new ArrayList();
   
+  theButton=new TriangleButton();
+  /*
   buttonNewSession=new SButton(displayWidth-200,(displayHeight/2)-320,250,100,color(240,210,245),"new session");
   buttonPin=new SButton(displayWidth-200,(displayHeight/2)-210,200,100,color(240,210,245),"pin");
   buttonTakePhoto=new SButton(displayWidth-200,displayHeight/2-100,200,100,color(240,210,245),"take photo");
   buttonRedraw=new SButton(0,displayHeight-100,200,100,color(0,255,255),"redraw");
+  */
   
   logMessage("message");
 }

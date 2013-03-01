@@ -62,10 +62,12 @@ void debugDraw()
 
 void UIDraw()
 {
-  
+  theButton.paint();
+ /* 
   buttonTakePhoto.paint();
   buttonPin.paint();
-  buttonRedraw.paint();
+  buttonRedraw.paint();*/
+  
 }
 
 

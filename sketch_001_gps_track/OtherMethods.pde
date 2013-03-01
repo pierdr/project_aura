@@ -30,7 +30,7 @@ void listenToMouseDown(int x, int y)
   /*if (buttonNewSession.mouseDown(x,y))
   {
     newSession();
-  }*/
+  }
   if(buttonTakePhoto.mouseDown(x,y))
   {
     
@@ -42,5 +42,16 @@ void listenToMouseDown(int x, int y)
   if(buttonRedraw.mouseDown(x,y))
   {
     redraw=true;
+  }*/
+  theButton.mouseEvent(x,y);
+}
+
+class Point{
+  int x;
+  int y;
+  public Point(int x,int y)
+  {
+    this.x=x;
+    this.y=y;
   }
 }

@@ -65,7 +65,7 @@ void draw()
       //drawBackground();
       //debugDraw();
       //drawShape();
-      //UIDraw();
+      UIDraw();
       redraw=true;
   }
 }

@@ -26,6 +26,7 @@ void setup()
   size (800, 800);
   points=new ArrayList<pt>();
   String [] s=loadStrings("points_cph.csv");
+  //String [] s=loadStrings("http://www.pierdr.com/ciid/06_GD/AURA.php?get_user=pierdr");
   float boundsTopLat=0, boundsRightLon=0, boundsBottomLat=0, boundsLeftLon=0;
   for (int i=0;i<s.length;i++) {
 
@@ -79,6 +80,7 @@ void setup()
   println("indexes");
   int f=0;
   points_matrix_prime=new float[sizePrime][2];
+  
   for (int i=0;i<s.length;i++) {
 
     String[] sTmp=split(s[i], ",");
@@ -86,18 +88,13 @@ void setup()
     {
 
       PVector pTmp=map.getScreenLocation(new PVector(float(sTmp[0]), float(sTmp[1])));
-      points.add(new pt(pTmp.x, pTmp.y));
+        points.add(new pt(pTmp.x, pTmp.y));
+        points_matrix[i][0] = pTmp.x+100;
+        points_matrix[i][1] = pTmp.y+100;
       //      voronoi.addPoint(new Vec2D(pTmp.x, pTmp.y));
-
-      points_matrix[i][0] = pTmp.x+100;
-      points_matrix[i][1] = pTmp.y+100;
-
       for (int k=0; k < sizePrime; k++) {
         if (i == primeIndexes[k]) {
-          if (pTmp.x<10 || pTmp.y<10)
-          {
-          }
-          else
+          if (!(pTmp.x<10 || pTmp.y<10))
           {
             points_matrix_prime[f][0] = pTmp.x+100;
             points_matrix_prime[f][1] = pTmp.y+100;
@@ -155,8 +152,8 @@ void setup()
 
   ArrayList <Edge> edgesMain = new ArrayList<Edge>();
   ArrayList <Edge> edgesSub  = new ArrayList<Edge>();
-  float[][] my_edges_prime = myDelaunay.getEdges();
-
+  float[][] my_edges_prime = my_delaunay_prime.getEdges();
+  
   for (int i=0; i < my_edges_prime.length; i++) {
     edgesMain.add(new Edge(my_edges_prime[i][0], my_edges_prime[i][1], my_edges_prime[i][2], my_edges_prime[i][3]));
     //edgesSub.add(new Edge(my_edges_prime[i][0], my_edges_prime[i][1], my_edges_prime[i][2], my_edges_prime[i][3]));
@@ -180,11 +177,10 @@ void setup()
         if (!tmpTr.hasVoid())
         {
           triangles.add(tmpTr);
-          
         }
-          edgesMain.remove(tmpTr.a);
-          edgesMain.remove(tmpTr.b);
-          edgesMain.remove(tmpTr.c); 
+        edgesMain.remove(tmpTr.a);
+        edgesMain.remove(tmpTr.b);
+        edgesMain.remove(tmpTr.c);
       }
       int lastElemIndex=edgesMain.size()-1;
 
@@ -218,7 +214,7 @@ void setup()
         {
           thirdEdgeIndex=i;
           int tmpArea=tmpTr.setEdges(secondEdge, tmp2);
-          if(tmpArea>maxArea)
+          if (tmpArea>maxArea)
           {
             maxArea=tmpArea;
           }
@@ -277,8 +273,11 @@ void draw()
       float startY = myEdges[i][1];
       float endX = myEdges[i][2];
       float endY = myEdges[i][3];
-      line( startX, startY, endX, endY );
-    }
+      if(!(startX<10 || startY<10) && !(endX<10 || endY<10))
+      {
+        line( startX, startY, endX, endY );
+      }  
+  }
     /*
     float[][] my_edges_prime = my_delaunay_prime.getEdges();
      
@@ -297,7 +296,7 @@ void draw()
      }
      line( startX, startY, endX, endY );
      }
-      */
+     */
     for (int i=0;i<triangles.size();i++)
     {
       //fill(fillColors[i]);
